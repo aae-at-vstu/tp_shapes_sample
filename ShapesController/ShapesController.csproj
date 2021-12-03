@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AShapeLib\AShapeLib.csproj" />
+    <ProjectReference Include="..\BasicShapes\BasicShapes.csproj" />
+    <ProjectReference Include="..\ConstDS\ConstDS.csproj" />
+    <ProjectReference Include="..\DataSource\DataSource.csproj" />
+    <ProjectReference Include="..\DbLibEF\DbLibEF.csproj" />
+    <ProjectReference Include="..\FileDS\FileDS.csproj" />
+    <ProjectReference Include="..\Shape4ViewAdapter\Shape4ViewAdapter.csproj" />
+  </ItemGroup>
+
+</Project>

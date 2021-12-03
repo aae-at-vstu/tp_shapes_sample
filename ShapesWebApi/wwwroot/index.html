@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Список фигур</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+<h2>Список фигур</h2>
+<form name="shapeForm">
+    <input type="hidden" name="id" value="0" />
+    <div class="form-group col-md-5">
+        <label for="name">Name:</label>
+        <input class="form-control" name="name" />
+    </div>
+    <div class="form-group col-md-5">
+        <label for="">A:</label>
+        <input class="form-control" name="A" type="number" />
+    </div>
+    <div class="form-group col-md-5">
+        <label for="">B:</label>
+        <input class="form-control" name="B" type="number" />
+    </div>
+    <div class="panel-body">
+        <button type="submit" id="submit" class="btn btn-primary">Загрузить и посчитать</button>
+        <a id="add" class="btn btn-primary">Добавить</a>
+    </div>
+</form>
+<table class="table table-condensed table-striped  col-md-6">
+    <thead><tr><th>Name</th><th>A</th><th>B</th><th>C</th><th>Area</th><th>Per</th></tr></thead>
+    <tbody>
+    </tbody>
+</table>
+<script>
+        // Получение списка фигур (в зависимости от кода)
+        async function GetShapes(id) {
+            const response = await fetch("/api/web/" + id, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            const shapes = await response.json();
+            let rows = document.querySelector("tbody");
+            shapes.forEach(shape => {
+                rows.append(row(shape));
+            });        }
+        // Добавление фигуры
+        async function CreateShape(Name, A, B) {
+
+            const response = await fetch("api/web", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: Name,
+                    a: parseFloat(A),
+                    b: parseFloat(B)
+                })
+            });
+            if (response.ok === true) {
+                const user = await response.json();
+                //reset();
+                document.querySelector("tbody").append(row(user));
+            }
+        }
+
+        // создание строки для таблицы
+        function row(shape) {
+
+            const tr = document.createElement("tr");
+            const nameTd = document.createElement("td");
+            nameTd.append(shape.name);
+            tr.append(nameTd);
+
+            const aTd = document.createElement("td");
+            aTd.append(shape.a);
+            tr.append(aTd);
+
+            const bTd = document.createElement("td");
+            bTd.append(shape.b);
+            tr.append(bTd);
+
+            const CTd = document.createElement("td");
+            CTd.append(shape.c);
+            tr.append(CTd);
+
+            const AreaTd = document.createElement("td");
+            AreaTd.append(shape.area);
+            tr.append(AreaTd);
+
+            const PerTd = document.createElement("td");
+            PerTd.append(shape.per);
+            tr.append(PerTd);
+
+            return tr;
+        }
+
+        // отправка формы
+        document.forms["shapeForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["shapeForm"];
+            const name = form.elements["name"].value;
+            const A = form.elements["A"].value;
+            const B = form.elements["B"].value;
+            CreateShape(name, A, B);
+        });
+
+        // загрузка фигур
+        GetShapes(0);
+</script>
+</body>
+</html>
